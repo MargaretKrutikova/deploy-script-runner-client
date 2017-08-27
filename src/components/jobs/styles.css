@@ -1,0 +1,15 @@
+.job-info-row {
+    display: flex;
+    flex-flow: row nowrap;
+    height: 35px;
+    align-items: center;
+}
+.job-info-panel-body {
+    padding: 10px 20px;
+}
+.job-info-row__value {
+    text-align: left;
+}
+.job-info-row__name, .job-info-row__value {
+     flex: 1;
+}
