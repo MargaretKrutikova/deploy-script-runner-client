@@ -1,6 +1,6 @@
 import React from 'react';
 import axios from 'axios';
-import styles from './styles.css';
+import {} from './styles.css';
 
 class LoginComponent extends React.Component {
     constructor(props){
@@ -31,9 +31,13 @@ class LoginComponent extends React.Component {
                 console.log(error);
             });
     }
+    logout = (event) => {
+        event.preventDefault();
+        this.props.onLogout();
+    }
     loginFormStyles() {
-        let styles = this.props.formStyles || "";
-        return `form-login ${styles}`;
+        let styles = this.props.styles || "";
+        return `form-login navbar-form ${styles}`;
     }
     render() {
         const isLoggedIn = this.props.authInfo != null;
@@ -66,12 +70,14 @@ class LoginComponent extends React.Component {
                 <button className="btn btn-success" type="submit">Login</button>
             </form>
         } else {
-            loginComponent = <span>Logged in as {userName}</span>
+            loginComponent = 
+            <div className={this.props.styles}>
+                <span className="navbar-text">Logged in as {userName}</span>
+                <button className="btn btn-default btn-sm navbar-btn" onClick={this.logout}>Logout</button>
+            </div>
         }
 
-        return (
-            loginComponent
-        );
+        return (loginComponent );
     }
 }
 

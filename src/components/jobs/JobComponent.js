@@ -1,26 +1,46 @@
 import React from 'react';
 import axios from 'axios';
-import styles from './styles.css';
+import {} from './styles.css';
 
 class JobComponent extends React.Component {
     constructor(props){
         super(props);
 
-        this.state = { job: {}, jobId: this.props.match.params.id };
+        this.state = { 
+            job: {}, 
+            jobId: this.props.match.params.id,
+            errorMessage: ""
+        };
+    }
 
-        this._fetchJobInfo(this.props.match.params.id);
+    componentDidMount() {
+        this._fetchJobInfo();
     }
     _fetchJobInfo = () => {
-        axios.get(`/api/jobs/${this.state.jobId}`)
-           .then(response => this.setState({ job: response.data }))
+        let authConfig = this.props.getAuthorizationApiConfig();
+        axios.get(`/api/jobs/${this.state.jobId}`, authConfig)
+            .then(response => {
+                this.setState({ job: response.data });
+            })
             .catch(error => {
                 // TODO: error handling
+                if (error.response.status === 401) { // unathorized
+                    this.setState({ errorMessage: "You are unauthorized, please login!"});
+                }
                 console.log(error);
             });
     }
     render() {
+        let errorMessage;
+        if (this.state.errorMessage) {
+            errorMessage = (
+                <div className="alert alert-danger" role="alert">
+                    {this.state.errorMessage}
+                </div>);
+        }
         return (
             <div className="jombotron col-md-5">
+                { errorMessage }
                 <div className="panel panel-info jon-info-panel">
                     <div className="panel-heading">
                         <h3 className="panel-title">Job info</h3>
