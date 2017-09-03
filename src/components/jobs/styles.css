@@ -13,3 +13,9 @@
 .job-info-row__name, .job-info-row__value {
      flex: 1;
 }
+.job-actions {
+    display: flex;
+    flex-flow: row nowrap;
+    width: 100%;
+    justify-content: space-between;
+}
