@@ -1,24 +1,29 @@
 import React from 'react';
 import axios from 'axios';
+import InputWrapper from './InputWrapper';
 import {} from './styles.css';
 
 class LoginComponent extends React.Component {
     constructor(props){
         super(props);
 
-        this.state = { userName: "", password: "" };
+        this.state = { 
+            userName: { value: "", isValid: true }, 
+            password: { value: "", isValid: true },
+            errorMessage: ""
+        };
     }
     handleInputChange = (event) => {
         const value = event.target.value;
         const name = event.target.name;
 
-        this.setState({ [name]: value });
+        this.setState({ [name]: { value: value, isValid: true }, errorMessage: ""});
     }
     login = (event) => {
         event.preventDefault();
         let loginInfo = {
-            userName: this.state.userName,
-            password: this.state.password
+            userName: this.state.userName.value,
+            password: this.state.password.value
         };
 
         // get auth token from the web api
@@ -27,7 +32,26 @@ class LoginComponent extends React.Component {
                 this.props.onAuthenticated(response.data);
             })
             .catch(error => {
-                // TODO: error handling for 401 unathorized and validation errors
+                let clientErrorMessage = "Something went wrong.";
+
+                let status = error.response.status;
+                if (status === 401) { // unathorized
+                    clientErrorMessage = "Username or password are incorrect."
+                }
+
+                if (status === 400) { // bad request, assume failed validation
+                    clientErrorMessage = "Validation errors.";
+
+                    let validationErrors = error.response.data ? error.response.data.errors : []; 
+                    for (let error of validationErrors) {
+                        this.setState(prevState => ({ [error.field]: { 
+                            value: prevState[error.field].value, isValid: false
+                        } }));
+                    }
+                }
+
+                this.setState({ errorMessage: clientErrorMessage });
+
                 console.log(error);
             });
     }
@@ -47,37 +71,29 @@ class LoginComponent extends React.Component {
         if (!isLoggedIn || !userName) {
             loginComponent = 
             <form className={this.loginFormStyles()} onSubmit={this.login}>
-                <div className="form-group">
-                    <input 
-                        type="text" 
-                        className="form-control" 
-                        onChange={this.handleInputChange} 
-                        value={this.state.userName}
-                        name="userName"
-                        placeholder="username"
-                    />
-                </div>
-                <div className="form-group">
-                    <input 
-                        type="password" 
-                        className="form-control" 
-                        onChange={this.handleInputChange} 
-                        value={this.state.password}
-                        name="password"
-                        placeholder="password"
-                    />
-                </div>
+                <InputWrapper {...this.state.userName} 
+                    name="userName"
+                    placeholder="username" 
+                    onChange={this.handleInputChange}
+                />
+                <InputWrapper {...this.state.password} 
+                    type="password" 
+                    name="password"
+                    placeholder="password" 
+                    onChange={this.handleInputChange}
+                />
                 <button className="btn btn-success" type="submit">Login</button>
+                <div className="form-login__error-message help-block">{this.state.errorMessage}</div>
             </form>
         } else {
             loginComponent = 
-            <div className={this.props.styles}>
+            <div className={this.props.styles + " logout-panel"}>
                 <span className="navbar-text">Logged in as {userName}</span>
                 <button className="btn btn-default btn-sm navbar-btn" onClick={this.logout}>Logout</button>
             </div>
         }
 
-        return (loginComponent );
+        return (loginComponent);
     }
 }
 

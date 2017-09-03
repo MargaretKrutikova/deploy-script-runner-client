@@ -1,3 +1,10 @@
 .form-login .form-group {
     margin-right: 5px;
 }
+.input-wrapper {
+    position: relative;
+}
+.form-login__error-message {
+    margin-bottom: 0;
+    color: lightgrey;
+}

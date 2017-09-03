@@ -8,3 +8,11 @@
 .App-header {
   color: white;
 }
+
+.navbar {
+  min-height: 80px;
+}
+
+.navbar-nav, .navbar-header, .logout-panel {
+  padding-top: 15px
+}
