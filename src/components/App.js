@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 import AboutComponent from './about/AboutComponent';
 import ProjectsComponent from './projects/ProjectsComponent';
 import JobComponent from './jobs/JobComponent';
+import JobListComponent from './jobs/JobListComponent';
 import LoginComponent from './login/LoginComponent';
 import './App.css';
 
@@ -96,6 +97,11 @@ class App extends Component {
           <Route path="/projects" component={(props) => 
               (<ProjectsComponent {...props} getAuthorizationApiConfig={() => this.getAuthorizationApiConfig()}/>)} 
           />
+
+          <Route exact path="/jobs" component={(props) => 
+              (<JobListComponent {...props} getAuthorizationApiConfig={() => this.getAuthorizationApiConfig()}/>)} 
+          />
+
           <Route path="/jobs/:id" component={(props) => 
               (<JobComponent {...props} getAuthorizationApiConfig={() => this.getAuthorizationApiConfig()}/>)} 
           />
