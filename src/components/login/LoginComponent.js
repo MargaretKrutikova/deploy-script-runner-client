@@ -1,6 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import InputWrapper from './InputWrapper';
+import ApiErrorHandler from '../../services/apiErrorHandler';
 import {} from './styles.css';
 
 class LoginComponent extends React.Component {
@@ -32,26 +33,14 @@ class LoginComponent extends React.Component {
                 this.props.onAuthenticated(response.data);
             })
             .catch(error => {
-                let clientErrorMessage = "Something went wrong.";
-
-                let status = error.response.status;
-                if (status === 401) { // unathorized
-                    clientErrorMessage = "Username or password are incorrect."
+                var loginError = ApiErrorHandler.GetLoginError(error);
+                this.setState({ errorMessage: loginError.message });
+                
+                for (let error of loginError.validationErrors) {
+                    this.setState(prevState => ({ 
+                        [error.field]: { value: prevState[error.field].value, isValid: false} 
+                    }));
                 }
-
-                if (status === 400) { // bad request, assume failed validation
-                    clientErrorMessage = "Validation errors.";
-
-                    let validationErrors = error.response.data ? error.response.data.errors : []; 
-                    for (let error of validationErrors) {
-                        this.setState(prevState => ({ [error.field]: { 
-                            value: prevState[error.field].value, isValid: false
-                        } }));
-                    }
-                }
-
-                this.setState({ errorMessage: clientErrorMessage });
-
                 console.log(error);
             });
     }
