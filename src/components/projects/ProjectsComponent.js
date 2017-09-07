@@ -1,7 +1,8 @@
 import React from 'react';
 import axios from 'axios';
 import AutoCloseAlertComponent from '../popups/AutoCloseAlertComponent';
-import ApiErrorHandler from '../../services/apiErrorHandler';
+import JobApiService from '../../services/api/JobApiService';
+import SettingsApiService from '../../services/api/SettingsApiService';
 import {} from './styles.css';
 
 class ProjectsComponent extends React.Component {
@@ -14,29 +15,19 @@ class ProjectsComponent extends React.Component {
         };
     }
     componentDidMount() {
-        this._fetchProjects();
+        this.getProjects();
     }
-    _fetchProjects() {
-        axios.get('/api/settings/projects')
-           .then(response => {
-               this.setState({ projects: response.data, errorMessage: "" });
-            })
-            .catch(error => {
-                this.setState({ errorMessage: ApiErrorHandler.GetGenericErrorMessage(error) });
-                console.log(error);
-            });
+    getProjects() {
+        SettingsApiService.GetProjects()
+            .then(projects => { this.setState({ projects: projects, errorMessage: "" }); })
+            .catch(errorMessage => this.onApiError(errorMessage));
     }
-    deployService(project, service) {
+    startJob = (project, service) => {
         let authConfig = this.props.getAuthorizationApiConfig();
-        axios.post('/api/jobs', { project, service }, authConfig)
-            .then(response => {
-                this.setState({ errorMessage: "" });
-                this.props.history.push(`/jobs/${response.data.id}`);
-            })
-            .catch(error => {
-                this.setState({ errorMessage: ApiErrorHandler.GetGenericErrorMessage(error) });
-                console.log(error);
-            });
+
+        JobApiService.StartJob(project, service, authConfig)
+           .then(job => { this.props.history.push(`/jobs/${job.id}`) })
+           .catch(errorMessage => { this.setState({ errorMessage: errorMessage }) });
     }
     render() {
         return (
@@ -53,7 +44,7 @@ class ProjectsComponent extends React.Component {
                                     <h4 className="list-group-item-heading">{service.name}</h4>
                                     <p className="list-group-item-text">{service.description}</p>
                                 </div>
-                                <button className="btn btn-primary service-item__deploy-btn" onClick={()=> this.deployService(project.name, service.name)}>
+                                <button className="btn btn-primary service-item__deploy-btn" onClick={()=> this.startJob(project.name, service.name)}>
                                     Deploy
                                 </button>
                             </div>)}

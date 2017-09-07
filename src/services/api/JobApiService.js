@@ -1,10 +1,11 @@
 import axios from 'axios';
+import { GetApiUrl } from './ApiUrl';
 import ApiErrorHandler from './ApiErrorHandler';
 
-const jobEndpoint = "/api/jobs/";
+const jobEndpoint = `${GetApiUrl()}api/jobs/`;
 
 class JobApiService {
-  _urlWithJobId = (jobId) => `/api/jobs/${jobId}`
+  _urlWithJobId = (jobId) => `${jobEndpoint}${jobId}`
 
   GetJob = (jobId, authConfig) => {
     const getJobPromise = new Promise((resolve, reject) => {
@@ -18,6 +19,20 @@ class JobApiService {
 
     return getJobPromise;
   }
+
+  StartJob = (project, service, authConfig) => {
+    const startJobPromise = new Promise((resolve, reject) => {
+      axios.post(jobEndpoint, { project, service }, authConfig)
+          .then(response => resolve(response.data))
+          .catch(error => {
+              console.log(error);
+              reject(ApiErrorHandler.GetGenericErrorMessage(error));
+          });
+    });
+
+    return startJobPromise;
+  }
+
   CancelJob = (jobId, authConfig) => {
     const cancelJobPromise = new Promise((resolve, reject) => {
       axios.put(this._urlWithJobId(jobId), { status: "CANCELLED" }, authConfig)

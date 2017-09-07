@@ -1,7 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import InputWrapper from './InputWrapper';
-import ApiErrorHandler from '../../services/apiErrorHandler';
+import AuthApiService from '../../services/api/AuthApiService';
 import {} from './styles.css';
 
 class LoginComponent extends React.Component {
@@ -22,18 +22,10 @@ class LoginComponent extends React.Component {
     }
     login = (event) => {
         event.preventDefault();
-        let loginInfo = {
-            userName: this.state.userName.value,
-            password: this.state.password.value
-        };
 
-        // get auth token from the web api
-        axios.post('/api/auth/token', loginInfo)
-            .then(response => {
-                this.props.onAuthenticated(response.data);
-            })
-            .catch(error => {
-                var loginError = ApiErrorHandler.GetLoginError(error);
+        AuthApiService.Login(this.state.userName.value, this.state.password.value)
+           .then(authInfo => { this.props.onAuthenticated(authInfo); })
+           .catch(loginError => { 
                 this.setState({ errorMessage: loginError.message });
                 
                 for (let error of loginError.validationErrors) {
@@ -41,7 +33,6 @@ class LoginComponent extends React.Component {
                         [error.field]: { value: prevState[error.field].value, isValid: false} 
                     }));
                 }
-                console.log(error);
             });
     }
     logout = (event) => {
