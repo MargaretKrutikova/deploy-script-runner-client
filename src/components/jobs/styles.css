@@ -1,3 +1,6 @@
+.jobs-table-wrapper {
+    padding-top: 20px;
+}
 .job-info-row {
     display: flex;
     flex-flow: row nowrap;
@@ -18,4 +21,21 @@
     flex-flow: row nowrap;
     width: 100%;
     justify-content: space-between;
+}
+.jobs-table-wrapper tr.jobs-table__row td { 
+    text-align: center;
+    vertical-align: middle;
+}
+.job-action-name {
+    margin-left: 7px;
+}
+.btn-job-action {
+    margin: 4px;
+}
+
+.job-actions-container--compact .job-action-name {
+    display: none;
+}
+.job-actions-container--single-job .job-actions {
+    flex-direction: row-reverse;
 }

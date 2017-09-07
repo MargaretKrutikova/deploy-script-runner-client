@@ -2,7 +2,9 @@ import React from 'react';
 import axios from 'axios';
 import AutoCloseAlertComponent from '../popups/AutoCloseAlertComponent';
 import JobDetailComponent from './JobDetailComponent';
-import ApiErrorHandler from '../../services/apiErrorHandler';
+import JobActionsComponent from './JobActionsComponent';
+import JobApiService from '../../services/api/JobApiService';
+
 import { } from './styles.css';
 
 class JobComponent extends React.Component {
@@ -15,42 +17,36 @@ class JobComponent extends React.Component {
             errorMessage: ""
         };
     }
-    urlForCurrentJob = (jobId) => `/api/jobs/${this.state.jobId}`
-    componentDidMount() {
-        this._fetchJobInfo();
-    }
-    _fetchJobInfo = () => {
+    componentDidMount() { this.getJob(); }
+    getJob = () => {
         let authConfig = this.props.getAuthorizationApiConfig();
-        axios.get(this.urlForCurrentJob(), authConfig)
-            .then(response => {
-                this.setState({ job: response.data, errorMessage: "" });
-            })
-            .catch(error => {
-                this.setState({ errorMessage: ApiErrorHandler.GetGenericErrorMessage(error) });
-                console.log(error);
-            });
+
+        JobApiService.GetJob(this.state.jobId, authConfig)
+            .then(job => { this.setState({ job: job, errorMessage: "" }); })
+            .catch(errorMessage => { this.setState({ errorMessage: errorMessage }) });
     }
-    cancelJob = () => {
-        let authConfig = this.props.getAuthorizationApiConfig();
-        axios.put(this.urlForCurrentJob(), { status: "CANCELLED" }, authConfig)
-            .then(response => {
-                // update cancelled job
-                this._fetchJobInfo();
-                this.setState({ errorMessage: "" });
-            })
-            .catch(error => {
-                this.setState({ errorMessage: ApiErrorHandler.GetGenericErrorMessage(error) });
-                console.log(error);
-            });
+    onApiError = (errorMessage) => {
+        this.setState({ errorMessage: errorMessage });
+    }
+    onActionCompleted = (actionResult) => {
+        if (actionResult.job) {
+            this.setState({ job: actionResult.job, errorMessage: ""});
+        }
+        if (actionResult.action === "REMOVED") {
+            this.props.history.push(`/jobs/`);
+        }
     }
     render() {
         return (
             <div className="jombotron">
                 <div className="col-md-5">
                     <JobDetailComponent job={this.state.job} />
-                    <div className="job-actions">
-                        <button className="btn btn-danger " onClick={this.cancelJob}>Cancel job</button>
-                        <button className="btn btn-primary" onClick={this._fetchJobInfo}>Refresh</button>
+                    <div className="job-actions-container job-actions-container--single-job">
+                        <JobActionsComponent 
+                            jobId={this.state.job.id} 
+                            getApiConfig={this.props.getAuthorizationApiConfig} 
+                            onActionCompleted={this.onActionCompleted} 
+                            onError={this.onApiError} />
                     </div>
                 </div>
                 <div className="col-md-5">

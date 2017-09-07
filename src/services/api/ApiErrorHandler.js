@@ -1,6 +1,5 @@
 
-class ApiErrorHandler {
-    GetGenericErrorMessage(error) {
+module.exports.GetGenericErrorMessage = function(error) {
         if (!error) return "";
 
         let errorResponse = error.response;
@@ -24,7 +23,7 @@ class ApiErrorHandler {
 
         return errorMessage;
     }
-    GetLoginError(error) {
+    module.exports.GetLoginError = function(error) {
         let status = error.response.status, validationErrors = [];
         let errorMessage = "Something went wrong.";
         if (status === 401) { // unathorized
@@ -38,6 +37,5 @@ class ApiErrorHandler {
 
         return { message: errorMessage, validationErrors : validationErrors }
     }
-}
 
-export default new ApiErrorHandler();
+//export default new ApiErrorHandler();

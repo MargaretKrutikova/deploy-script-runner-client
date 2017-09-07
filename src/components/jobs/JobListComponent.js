@@ -1,7 +1,11 @@
 import React from 'react';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
 import AutoCloseAlertComponent from '../popups/AutoCloseAlertComponent';
-import ApiErrorHandler from '../../services/apiErrorHandler';
+import JobActionsComponent from './JobActionsComponent';
+import JobApiService from '../../services/api/JobApiService';
+
+import { } from './styles.css';
 
 class JobListComponent extends React.Component {
     constructor(props){
@@ -9,46 +13,79 @@ class JobListComponent extends React.Component {
 
         this.state = { jobs: [], errorMessage: "" };
     }
-     componentDidMount() {
-        this._fetchJobs();
-    }
-    _fetchJobs() {
+    componentDidMount() { this.getJobs(); }
+    getJobs() {
         let authConfig = this.props.getAuthorizationApiConfig();
-        axios.get('/api/jobs', authConfig)
-           .then(response => {
-               this.setState({ jobs: response.data, errorMessage: "" });
-            })
-            .catch(error => {
-                this.setState({ errorMessage: ApiErrorHandler.GetGenericErrorMessage(error) });
-                console.log(error);
-            });
+
+        JobApiService.GetJobs(authConfig)
+            .then(jobs => { this.setState({ jobs: jobs, errorMessage: "" }); })
+            .catch(errorMessage => this.onApiError(errorMessage));
     }
+    removeJobs = () => {
+        let authConfig = this.props.getAuthorizationApiConfig();
+
+        JobApiService.RemoveJobs(authConfig)
+            .then(jobs => { this.getJobs(); }) // not all jobs are allowed to be removed
+            .catch(errorMessage => this.onApiError(errorMessage));
+    }
+    onApiError = (errorMessage) => {
+        this.setState({ errorMessage: errorMessage });
+    }
+    onActionCompleted = (index, actionResult) => {
+        if (actionResult.job) {
+            this.setState(prevState => {
+                prevState.jobs[index] = actionResult.job;
+                return { jobs: prevState.jobs, errorMessage: "" }
+            });
+        }
+        if (actionResult.action === "REMOVED") {
+            this.setState(prevState => {
+                prevState.jobs.splice(index, 1);
+                return { jobs: prevState.jobs, errorMessage: "" }
+            });
+        }
+    }
+    
     render() {
         return (
             <div className="jombotron row">
+                <div style={{ height: '40px'}}>
+                    <AutoCloseAlertComponent  message={this.state.errorMessage} type="danger" />
+                </div>
+                
                 <h1>Jobs</h1>
-                <div className="col-md-7">
+                <div className="col-md-8 jobs-table-wrapper">
                 <table className="table table-striped table-bordered table-hover">
-                    <thead className="blue-grey lighten-4">
+                    <thead>
                         <tr>
                         <th>id</th>
                         <th>project</th>
                         <th>service</th>
                         <th>status</th>
+                        <th>end time</th>
+                        <th>actions</th>
                         </tr>
                     </thead>
                     <tbody>
                     {this.state.jobs.map((job, index) => 
-                        <tr scope="row" key={index} className="">
-                            <td className="">{job.id}</td>
+                        <tr scope="row" key={index} className="jobs-table__row">
+                            <td className=""><Link to={`/jobs/${job.id}`}>{job.id}</Link></td>
                             <td className="">{job.project}</td>
                             <td className="">{job.service}</td>
                             <td className="">{job.status}</td>
+                            <td className="">{job.endTime}</td>
+                            <td className="job-actions-container--compact">
+                                <JobActionsComponent 
+                                    jobId={job.id} 
+                                    getApiConfig={this.props.getAuthorizationApiConfig} 
+                                    onActionCompleted={this.onActionCompleted.bind(this, index)} 
+                                    onError={this.onApiError} />
+                            </td>
                         </tr>)
                      }
                     </tbody>
                 </table>
-                    <AutoCloseAlertComponent message={this.state.errorMessage} type="danger" />
+                <button className="btn btn-danger " onClick={this.removeJobs}>Remove all</button>
                 </div>
             </div>
         );

@@ -2,6 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import AutoCloseAlertComponent from '../popups/AutoCloseAlertComponent';
 import ApiErrorHandler from '../../services/apiErrorHandler';
+import {} from './styles.css';
 
 class ProjectsComponent extends React.Component {
     constructor(props){
@@ -45,11 +46,16 @@ class ProjectsComponent extends React.Component {
                     {this.state.projects.map((project, index) => 
                     <div className="container" key={index}>
                         <h2>{project.name}</h2>
-                        <div className="col-md-3 list-group">{project.services.map((service, index) => 
-                            <div className="list-group-item " key={index}>
-                                <h4 className="list-group-item-heading">{service.name}</h4>
-                                <p className="list-group-item-text">{service.description}</p>
-                                <button className="btn btn-primary" onClick={()=> this.deployService(project.name, service.name)}>Deploy</button>
+                        <div className="col-md-4 list-group">
+                            {project.services.map((service, index) => 
+                            <div className="list-group-item service-item" key={index}>
+                                <div className="service-item__description">
+                                    <h4 className="list-group-item-heading">{service.name}</h4>
+                                    <p className="list-group-item-text">{service.description}</p>
+                                </div>
+                                <button className="btn btn-primary service-item__deploy-btn" onClick={()=> this.deployService(project.name, service.name)}>
+                                    Deploy
+                                </button>
                             </div>)}
                         </div>
                     </div>)}

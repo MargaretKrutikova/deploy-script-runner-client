@@ -1,0 +1,12 @@
+.service-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 90px;
+}
+.service-item__description {
+
+}
+.service-item__deploy-btn {
+    
+}
