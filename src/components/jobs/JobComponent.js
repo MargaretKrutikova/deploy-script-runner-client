@@ -39,7 +39,7 @@ class JobComponent extends React.Component {
     render() {
         return (
             <div className="jombotron">
-                <div className="col-md-5">
+                <div className="col-md-6">
                     <JobDetailComponent job={this.state.job} />
                     <div className="job-actions-container job-actions-container--single-job">
                         <JobActionsComponent 

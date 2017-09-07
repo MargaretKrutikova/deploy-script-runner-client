@@ -4,8 +4,8 @@
 .job-info-row {
     display: flex;
     flex-flow: row nowrap;
-    height: 35px;
     align-items: center;
+    word-break: break-all;
 }
 .job-info-panel-body {
     padding: 10px 20px;
@@ -13,8 +13,11 @@
 .job-info-row__value {
     text-align: left;
 }
-.job-info-row__name, .job-info-row__value {
-     flex: 1;
+.job-info-row__name {
+     flex: 0 0 120px;
+}
+.job-info-row__value {
+    flex: 4 1 auto;
 }
 .job-actions {
     display: flex;
