@@ -20,7 +20,7 @@ class ProjectsComponent extends React.Component {
     getProjects() {
         SettingsApiService.GetProjects()
             .then(projects => { this.setState({ projects: projects, errorMessage: "" }); })
-            .catch(errorMessage => this.onApiError(errorMessage));
+            .catch(errorMessage => { this.setState({ errorMessage: errorMessage }) });
     }
     startJob = (project, service) => {
         let authConfig = this.props.getAuthorizationApiConfig();

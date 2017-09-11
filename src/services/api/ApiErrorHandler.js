@@ -3,10 +3,10 @@ module.exports.GetGenericErrorMessage = function(error) {
         if (!error) return "";
 
         let errorResponse = error.response;
-        if (errorResponse.data && errorResponse.data.detail) {
+        if (errorResponse && errorResponse.data && errorResponse.data.detail) {
             return errorResponse.data.detail;
         }
-        let status = errorResponse.status, errorMessage;
+        let status = (errorResponse || {}).status, errorMessage;
         switch (status) {
             case 401:
                 errorMessage = "You are unauthorized, please login!";
@@ -24,7 +24,7 @@ module.exports.GetGenericErrorMessage = function(error) {
         return errorMessage;
     }
     module.exports.GetLoginError = function(error) {
-        let status = error.response.status, validationErrors = [];
+        let status = (error.response || {}).status, validationErrors = [];
         let errorMessage = "Something went wrong.";
         if (status === 401) { // unathorized
             errorMessage = "Username or password are incorrect.";
