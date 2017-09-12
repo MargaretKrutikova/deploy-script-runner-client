@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
+import { HashRouter, Route, Link } from 'react-router-dom';
 
 import AboutComponent from './about/AboutComponent';
 import ProjectsComponent from './projects/ProjectsComponent';
@@ -68,7 +68,7 @@ class App extends Component {
   }
   render() {
     return (
-      <Router>
+      <HashRouter>
         <div className="App">
 
         <div className="App-header navbar navbar-inverse">
@@ -104,11 +104,11 @@ class App extends Component {
 
           <Route path="/jobs/:id" component={(props) => 
               (<JobComponent {...props} getAuthorizationApiConfig={() => this.getAuthorizationApiConfig()}/>)} 
-          />
+          />         
         </div>
 
         </div>
-      </Router>
+      </HashRouter>
     );
   }
 }
