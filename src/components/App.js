@@ -4,6 +4,7 @@ import { HashRouter, Route, Link } from 'react-router-dom';
 import AboutComponent from './about/AboutComponent';
 import ProjectsComponent from './projects/ProjectsComponent';
 import JobComponent from './jobs/JobComponent';
+import SettingsComponent from './settings/SettingsComponent';
 import JobListComponent from './jobs/JobListComponent';
 import LoginComponent from './login/LoginComponent';
 import './App.css';
@@ -81,6 +82,7 @@ class App extends Component {
                 <li><Link to="/">About</Link></li>
                 <li><Link to="/projects">Projects</Link></li>
                 <li><Link to="/jobs">Jobs</Link></li>
+                <li><Link to="/settings">Settings</Link></li>
               </ul>
               <LoginComponent 
                 styles="navbar-right"
@@ -104,7 +106,11 @@ class App extends Component {
 
           <Route path="/jobs/:id" component={(props) => 
               (<JobComponent {...props} getAuthorizationApiConfig={() => this.getAuthorizationApiConfig()}/>)} 
-          />         
+          />
+
+          <Route exact path="/settings" component={(props) => 
+              (<SettingsComponent {...props} getAuthorizationApiConfig={() => this.getAuthorizationApiConfig()}/>)} 
+          />
         </div>
 
         </div>

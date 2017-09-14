@@ -1,5 +1,4 @@
 import React from 'react';
-import axios from 'axios';
 import AutoCloseAlertComponent from '../popups/AutoCloseAlertComponent';
 import JobApiService from '../../services/api/JobApiService';
 import SettingsApiService from '../../services/api/SettingsApiService';
