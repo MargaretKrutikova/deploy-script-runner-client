@@ -1,5 +1,4 @@
 import React from 'react';
-import axios from 'axios';
 import AutoCloseAlertComponent from '../popups/AutoCloseAlertComponent';
 import JobDetailComponent from './JobDetailComponent';
 import JobActionsComponent from './JobActionsComponent';

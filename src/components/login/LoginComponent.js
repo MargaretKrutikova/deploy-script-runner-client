@@ -1,5 +1,4 @@
 import React from 'react';
-import axios from 'axios';
 import InputWrapper from './InputWrapper';
 import AuthApiService from '../../services/api/AuthApiService';
 import {} from './styles.css';
