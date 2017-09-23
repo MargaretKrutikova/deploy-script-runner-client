@@ -1,0 +1,17 @@
+.l-flex-row, .l-flex-column, .l-flex-row-wrap, .l-flex-column-wrap {
+  display: flex;
+}
+
+.l-flex-row, .l-flex-row-wrap {
+  flex-direction: row;
+}
+.l-flex-column, .l-flex-column-wrap {
+  flex-direction: column;
+}
+.l-flex-row-wrap, .l-flex-column-wrap {
+  flex-wrap: wrap;
+}
+
+.l-flex-space-between {
+  justify-content: space-between;
+}
