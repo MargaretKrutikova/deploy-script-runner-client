@@ -1,0 +1,16 @@
+@import 'styles/mixins/_flexbox.scss';
+
+.text-input--oneline {
+  @include flexbox($wrap: wrap, $justify: space-between);
+
+  label {
+    flex: 1 1 30%;
+  }
+  .text-input__input-wrapper {
+    flex: 1 1 70%;
+  }
+}
+
+.text-input__input-wrapper {
+  position: relative;
+}

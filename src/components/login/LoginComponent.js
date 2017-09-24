@@ -1,5 +1,5 @@
 import React from 'react';
-import InputWrapper from './InputWrapper';
+import TextInput from '../common/TextInput';
 import AuthApiService from '../../services/api/AuthApiService';
 import {} from './styles.css';
 
@@ -23,7 +23,10 @@ class LoginComponent extends React.Component {
         event.preventDefault();
 
         AuthApiService.Login(this.state.userName.value, this.state.password.value)
-           .then(authInfo => { this.props.onAuthenticated(authInfo); })
+           .then(authInfo => { 
+               this.props.onAuthenticated(authInfo);
+               this.props.history.push('/projects');
+            })
            .catch(loginError => { 
                 this.setState({ errorMessage: loginError.message });
                 
@@ -38,35 +41,36 @@ class LoginComponent extends React.Component {
         event.preventDefault();
         this.props.onLogout();
     }
-    loginFormStyles() {
-        let styles = this.props.styles || "";
-        return `form-login navbar-form ${styles}`;
-    }
     render() {
         const isLoggedIn = this.props.authInfo != null;
         const userName = isLoggedIn ? this.props.authInfo.userName : null;
+        const { verticalLayout = true, className = "" } = this.props;
 
         let loginComponent;
         if (!isLoggedIn || !userName) {
             loginComponent = 
-            <form className={this.loginFormStyles()} onSubmit={this.login}>
-                <InputWrapper {...this.state.userName} 
-                    name="userName"
-                    placeholder="username" 
-                    onChange={this.handleInputChange}
-                />
-                <InputWrapper {...this.state.password} 
-                    type="password" 
-                    name="password"
-                    placeholder="password" 
-                    onChange={this.handleInputChange}
-                />
-                <button className="btn btn-success" type="submit">Login</button>
-                <div className="form-login__error-message help-block">{this.state.errorMessage}</div>
-            </form>
+                <div className={"login-form " + className}>
+                  <form onSubmit={this.login} className={'login-form__form ' + (!verticalLayout ? 'login-form__form--inline' : '')}>
+                    <TextInput {...this.state.userName} 
+                        name="userName"
+                        placeholder="username"
+                        onChange={this.handleInputChange}
+                        verticalLayout={verticalLayout}
+                    />
+                    <TextInput {...this.state.password} 
+                        type="password" 
+                        name="password"
+                        placeholder="password"
+                        onChange={this.handleInputChange}
+                        verticalLayout={verticalLayout}
+                    />
+                    <button className="btn btn-success" type="submit">Login</button>
+                </form>
+                <div className="login-form__error-message">{this.state.errorMessage}</div>
+            </div>
         } else {
             loginComponent = 
-            <div className={this.props.styles + " logout-panel"}>
+            <div>
                 <span className="navbar-text">Logged in as {userName}</span>
                 <button className="btn btn-default btn-sm navbar-btn" onClick={this.logout}>Logout</button>
             </div>

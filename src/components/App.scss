@@ -1,18 +1,14 @@
-.App {
-}
-
-.App-logo {
-  height: 80px;
-}
+@import '../styles/mixins/_flexbox.scss';
 
 .App-header {
   color: white;
+  padding-top: 15px;
 }
-
+ 
 .navbar {
   min-height: 80px;
 }
 
-.navbar-nav, .navbar-header, .logout-panel {
-  padding-top: 15px
+.App-header__navbar {
+  @include flexbox($wrap: wrap, $justify: space-between);
 }

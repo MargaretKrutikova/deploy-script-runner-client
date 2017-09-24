@@ -1,11 +1,11 @@
-.form-login {
-    display: flex;
-}
-.form-login .form-group {
-    margin-right: 5px;
-}
-.form-login__error-message {
-    margin-bottom: 0;
+@import '../../styles/mixins/_flexbox.scss';
+
+.login-form__error-message {
     color: lightgrey;
-    align-self: flex-start;
+}
+.login-form__form {
+    margin-bottom: 6px;
+}
+.login-form__form--inline {
+    @include flexbox($direction: row, $align-items: center);
 }

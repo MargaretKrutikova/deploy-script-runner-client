@@ -77,15 +77,16 @@ class App extends Component {
             <div className="navbar-header">
               <Link className="navbar-brand" to="/">Deploy Service</Link>
             </div>
-            <div className="navbar-collapse collapse">
+            <div className="App-header__navbar">
               <ul className="nav navbar-nav">
                 <li><Link to="/">About</Link></li>
                 <li><Link to="/projects">Projects</Link></li>
                 <li><Link to="/jobs">Jobs</Link></li>
                 <li><Link to="/settings">Settings</Link></li>
+                { !this.state.authInfo && <li><Link to="/login">Login</Link></li> }
               </ul>
               <LoginComponent 
-                styles="navbar-right"
+                verticalLayout={false}
                 onAuthenticated={this.onUserAuthenticated}
                 onLogout={this.invalidateAuthInfo}
                 authInfo={this.state.authInfo}
@@ -96,7 +97,7 @@ class App extends Component {
 
         <div className="container">
           <Route exact path="/" component={AboutComponent}/>
-          <Route path="/projects" component={(props) => 
+          <Route exact path="/projects" component={(props) => 
               (<ProjectsComponent {...props} getAuthorizationApiConfig={() => this.getAuthorizationApiConfig()}/>)} 
           />
 
@@ -110,6 +111,14 @@ class App extends Component {
 
           <Route exact path="/settings" component={(props) => 
               (<SettingsComponent {...props} getAuthorizationApiConfig={() => this.getAuthorizationApiConfig()}/>)} 
+          />
+          <Route path="/login" component={(props) => 
+              (<LoginComponent 
+                {...props}
+                className="col-md-5"
+                onAuthenticated={this.onUserAuthenticated}
+                onLogout={this.invalidateAuthInfo}
+              />)} 
           />
         </div>
 
