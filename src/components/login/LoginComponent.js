@@ -26,7 +26,7 @@ class LoginComponent extends React.Component {
            .then(authInfo => { 
                this.props.onAuthenticated(authInfo);
                if (this.props.history) {
-                this.props.history.push('/projects');
+                this.props.history.push('/groups');
                }
             })
            .catch(loginError => { 

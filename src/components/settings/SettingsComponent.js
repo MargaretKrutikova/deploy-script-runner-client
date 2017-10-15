@@ -20,7 +20,7 @@ class SettingsComponent extends React.Component {
       let authConfig = this.props.getAuthorizationApiConfig();
 
       SettingsApiService.ReloadSettings(authConfig)
-          .then(projects => { this.setState({ errorMessage: "", doneMessage: settingsReloadedUserMessage }); })
+          .then(groups => { this.setState({ errorMessage: "", doneMessage: settingsReloadedUserMessage }); })
           .catch(errorMessage => { this.setState({ errorMessage: errorMessage, doneMessage: "" }) });
     }
     render() {
@@ -29,7 +29,7 @@ class SettingsComponent extends React.Component {
                 <div className="col-md-6">
                     <p className="reload-settings-message">
                       This will reload deployment settings from the settings file. <br />
-                      If the file has changed, the changes will appear in the <Link to={"/projects"}>projects</Link>.
+                      If the file has changed, the changes will appear in the <Link to={"/groups"}>groups</Link>.
                     </p>
                     <button data-toggle="tooltip" 
                         title="cancel" 

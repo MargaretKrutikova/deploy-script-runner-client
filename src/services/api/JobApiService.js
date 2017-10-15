@@ -20,9 +20,9 @@ class JobApiService {
     return getJobPromise;
   }
 
-  StartJob = (project, service, authConfig) => {
+  StartJob = (group, service, authConfig) => {
     const startJobPromise = new Promise((resolve, reject) => {
-      axios.post(jobEndpoint, { project, service }, authConfig)
+      axios.post(jobEndpoint, { group, service }, authConfig)
           .then(response => resolve(response.data))
           .catch(error => {
               console.log(error);

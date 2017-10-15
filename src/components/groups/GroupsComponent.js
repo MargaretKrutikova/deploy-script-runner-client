@@ -4,27 +4,27 @@ import JobApiService from '../../services/api/JobApiService';
 import SettingsApiService from '../../services/api/SettingsApiService';
 import {} from './styles.css';
 
-class ProjectsComponent extends React.Component {
+class GroupsComponent extends React.Component {
     constructor(props){
         super(props);
 
         this.state = { 
-            projects: [],
+            groups: [],
             errorMessage: "" 
         };
     }
     componentDidMount() {
-        this.getProjects();
+        this.getGroups();
     }
-    getProjects() {
-        SettingsApiService.GetProjects()
-            .then(projects => { this.setState({ projects: projects, errorMessage: "" }); })
+    getGroups() {
+        SettingsApiService.GetGroups()
+            .then(groups => { this.setState({ groups: groups, errorMessage: "" }); })
             .catch(errorMessage => { this.setState({ errorMessage: errorMessage }) });
     }
-    startJob = (project, service) => {
+    startJob = (group, service) => {
         let authConfig = this.props.getAuthorizationApiConfig();
 
-        JobApiService.StartJob(project, service, authConfig)
+        JobApiService.StartJob(group, service, authConfig)
            .then(job => { this.props.history.push(`/jobs/${job.id}`) })
            .catch(errorMessage => { this.setState({ errorMessage: errorMessage }) });
     }
@@ -32,18 +32,18 @@ class ProjectsComponent extends React.Component {
         return (
             <div className="jombotron row">
                 <div className="col-md-5">
-                    <h1>Projects</h1>
-                    {this.state.projects.map((project, index) => 
+                    <h1>Groups</h1>
+                    {this.state.groups.map((group, index) => 
                     <div className="container" key={index}>
-                        <h2>{project.name}</h2>
+                        <h2>{group.name}</h2>
                         <div className="col-md-4 list-group">
-                            {project.services.map((service, index) => 
+                            {group.services.map((service, index) => 
                             <div className="list-group-item service-item" key={index}>
                                 <div className="service-item__description">
                                     <h4 className="list-group-item-heading">{service.name}</h4>
                                     <p className="list-group-item-text">{service.description}</p>
                                 </div>
-                                <button className="btn btn-primary service-item__deploy-btn" onClick={()=> this.startJob(project.name, service.name)}>
+                                <button className="btn btn-primary service-item__deploy-btn" onClick={()=> this.startJob(group.name, service.name)}>
                                     Deploy
                                 </button>
                             </div>)}
@@ -58,4 +58,4 @@ class ProjectsComponent extends React.Component {
     }
 }
 
-export default ProjectsComponent;
+export default GroupsComponent;

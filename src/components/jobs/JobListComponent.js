@@ -58,7 +58,7 @@ class JobListComponent extends React.Component {
                     <thead>
                         <tr>
                         <th>id</th>
-                        <th>project</th>
+                        <th>group</th>
                         <th>service</th>
                         <th>status</th>
                         <th>end time</th>
@@ -69,7 +69,7 @@ class JobListComponent extends React.Component {
                     {this.state.jobs.map((job, index) => 
                         <tr scope="row" key={index} className="jobs-table__row">
                             <td className=""><Link to={`/jobs/${job.id}`}>{job.id}</Link></td>
-                            <td className="">{job.project}</td>
+                            <td className="">{job.group}</td>
                             <td className="">{job.service}</td>
                             <td className="">{job.status}</td>
                             <td className="">{job.endTime}</td>

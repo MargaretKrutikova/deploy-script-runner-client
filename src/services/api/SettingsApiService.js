@@ -3,7 +3,7 @@ import ApiErrorHandler from './ApiErrorHandler';
 import { GetApiUrl } from './ApiUrl';
 
 const settingsEndpoint = `${GetApiUrl()}api/settings`;
-const projectEndpoint = `${settingsEndpoint}/projects`;
+const groupEndpoint = `${settingsEndpoint}/groups`;
 
 class SettingsApiService {
   ReloadSettings = (authConfig) => {
@@ -19,9 +19,9 @@ class SettingsApiService {
     return reloadSettingsPromise;
   }
 
-  GetProjects = () => {
-    const getProjectsPromise = new Promise((resolve, reject) => {
-      axios.get(projectEndpoint)
+  GetGroups = () => {
+    const getGroupsPromise = new Promise((resolve, reject) => {
+      axios.get(groupEndpoint)
           .then(response => resolve(response.data))
           .catch(error => {
               console.log(error);
@@ -29,7 +29,7 @@ class SettingsApiService {
           });
     });
 
-    return getProjectsPromise;
+    return getGroupsPromise;
   }
 }
 

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { HashRouter, Route, Link } from 'react-router-dom';
 
 import AboutComponent from './about/AboutComponent';
-import ProjectsComponent from './projects/ProjectsComponent';
+import GroupsComponent from './groups/GroupsComponent';
 import JobComponent from './jobs/JobComponent';
 import SettingsComponent from './settings/SettingsComponent';
 import JobListComponent from './jobs/JobListComponent';
@@ -80,7 +80,7 @@ class App extends Component {
             <div className="App-header__navbar">
               <ul className="nav navbar-nav">
                 <li><Link to="/">About</Link></li>
-                <li><Link to="/projects">Projects</Link></li>
+                <li><Link to="/groups">Groups</Link></li>
                 <li><Link to="/jobs">Jobs</Link></li>
                 <li><Link to="/settings">Settings</Link></li>
                 { !this.state.authInfo && <li><Link to="/login">Login</Link></li> }
@@ -97,8 +97,8 @@ class App extends Component {
 
         <div className="container">
           <Route exact path="/" component={AboutComponent}/>
-          <Route exact path="/projects" component={(props) => 
-              (<ProjectsComponent {...props} getAuthorizationApiConfig={() => this.getAuthorizationApiConfig()}/>)} 
+          <Route exact path="/groups" component={(props) => 
+              (<GroupsComponent {...props} getAuthorizationApiConfig={() => this.getAuthorizationApiConfig()}/>)} 
           />
 
           <Route exact path="/jobs" component={(props) => 

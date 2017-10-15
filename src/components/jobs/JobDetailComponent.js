@@ -13,8 +13,8 @@ const JobDetailComponent = (props) => {
                 <span className="job-info-row__value">{props.job.id}</span>
             </div>
             <div className="job-info-row list-group-item">
-                <span className="job-info-row__name">Project:</span>
-                <span className="job-info-row__value">{props.job.project}</span>
+                <span className="job-info-row__name">Group:</span>
+                <span className="job-info-row__value">{props.job.group}</span>
             </div>
             <div className="job-info-row list-group-item">
                 <span className="job-info-row__name">Service:</span>
