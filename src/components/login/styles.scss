@@ -1,0 +1,11 @@
+@import '../../styles/mixins/_flexbox.scss';
+
+.login-form__error-message {
+    color: lightgrey;
+}
+.login-form__form {
+    margin-bottom: 6px;
+}
+.login-form__form--inline {
+    @include flexbox($direction: row, $align-items: center);
+}

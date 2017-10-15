@@ -1,0 +1,14 @@
+@import '../styles/mixins/_flexbox.scss';
+
+.App-header {
+  color: white;
+  padding-top: 15px;
+}
+ 
+.navbar {
+  min-height: 80px;
+}
+
+.App-header__navbar {
+  @include flexbox($wrap: wrap, $justify: space-between);
+}
