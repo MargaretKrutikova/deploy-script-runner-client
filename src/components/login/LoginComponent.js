@@ -25,7 +25,9 @@ class LoginComponent extends React.Component {
         AuthApiService.Login(this.state.userName.value, this.state.password.value)
            .then(authInfo => { 
                this.props.onAuthenticated(authInfo);
-               this.props.history.push('/projects');
+               if (this.props.history) {
+                this.props.history.push('/projects');
+               }
             })
            .catch(loginError => { 
                 this.setState({ errorMessage: loginError.message });
